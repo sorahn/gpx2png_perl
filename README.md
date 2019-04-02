@@ -13,4 +13,3 @@ get gpx from gmap-pedometer.  **USE TRACK MODE**
 perl gpx2png.pl -t watercolor -z 15 -c 100 -o <output>.png <input>.gpx;
 open -a Photos <output>.png
 ```
-

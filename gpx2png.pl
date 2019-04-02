@@ -62,18 +62,17 @@ my $waypointcircleradius = "auto";
 ## used in round-robin fashion
 ## tilesource==(white|transparent) overwrites this setting!
 my @drawingcolors = (
-    '#00dd00', '#0099ff', '#ff9900', '#99ff00', '#9900ff', '#ff0099',
-    '#00ff99', '#dd0000', '#0000dd', '#cccc00', '#cc00cc', '#00cccc'
+    '#dd0000'
 );
 
 ## drawing style of lower layer for tracks
 ## for colors see  @drawingcolors
 ## tilesource==(white|transparent) overwrites this setting!
-my %drawingstylelowerlayer = ( linewidth => 4, fill => 'graya(0%, 0.0)' );
+my %drawingstylelowerlayer = ( linewidth => 2, fill => 'graya(0%, 0.0)' );
 
 ## drawing style of upper layer for tracks
 ## tilesource==(white|transparent) overwrites this setting!
-my %drawingstyleupperlayer = ( stroke => '#ffffff', fill => 'graya(0%, 0.0)' );
+my %drawingstyleupperlayer = ( stroke => '#dd0000', linewidth => 2, fill => 'graya(0%, 0.0)' );
 
 ## text style for copyright notice
 my %copyrightnoticestyle = (
@@ -143,6 +142,7 @@ my $maxlat            = undef;
 my $maxlong           = undef;
 my @trkseglist        = ();
 my @wptlist           = ();
+my @trksegcolor       = ();
 my $image             = undef;
 my %usedtiles         = ();
 my @photolist         = ();
@@ -551,7 +551,7 @@ sub getFilename {
     my ( $x, $y, $zoom ) = @_;
     my $suffix = $baseurl =~ /\.jpg$/ ? "jpg" : "png";
     return
-      sprintf( $tilesprefix . "-" . $tilesourcename . "-z%03d-x%05d-y%05d.%s",
+      sprintf( "./tile-cache/" . $tilesprefix . "-" . $tilesourcename . "-z%03d-x%05d-y%05d.%s",
         $zoom, $x, $y, $suffix );
 }
 
@@ -732,8 +732,9 @@ sub determineTiles {
 
 ## read all GPX data from files (ARGV) or STDIN and perform some analysis
 sub readAllGPX {
-    @trkseglist = ();
-    @wptlist    = ();
+    @trkseglist    = ();
+    @wptlist       = ();
+    @trksegcolor   = ();
 
     if ( @ARGV == 0 ) {
         print "Reading .gpx files from STDIN\n" if ( $quiet == 0 );
@@ -743,9 +744,17 @@ sub readAllGPX {
     }
     else {
         for my $filename (@ARGV) {
+
+            if (index($filename, 'walk') != -1) {
+                push @trksegcolor, '#0000ff';
+            } else {
+                push @trksegcolor, '#dd0000';
+            }
+
             print "Reading file $filename\n" if ( $quiet == 0 );
             open( FILE, '<', $filename ) or next;
             readGPXfromFile( \*FILE );
+
             close(FILE);
         }
     }
@@ -1001,19 +1010,21 @@ sub drawAllTracks {
     $filenamepattern =~ s/.png$/\%05d.png/i;
 
     my $colorcounter = 0;
+    my $idx = 0;
     for my $trkseg (@trkseglist) {
         if ( defined($trackiconfilename) ) {
             drawTreckSegmentWithArrows( \@{$trkseg} );
         }
         else {
-            my %drawingStyle = (%drawingstylelowerlayer);
-            $drawingStyle{primitive} = 'polyline';
-            $drawingStyle{stroke} =
-              $drawingcolors[ ( ++$colorcounter ) % @drawingcolors ];
-            drawTrekSegment( \@{$trkseg}, \%drawingStyle );
+            # my %drawingStyle = (%drawingstylelowerlayer);
+            # $drawingStyle{primitive} = 'polyline';
+            # $drawingStyle{stroke} =
+            #   $drawingcolors[ ( ++$colorcounter ) % @drawingcolors ];
+            # drawTrekSegment( \@{$trkseg}, \%drawingStyle );
 
-            %drawingStyle = (%drawingstyleupperlayer);
+            my %drawingStyle = (%drawingstyleupperlayer);
             $drawingStyle{primitive} = 'polyline';
+            $drawingStyle{stroke} = $trksegcolor[$idx];
             drawTrekSegment( \@{$trkseg}, \%drawingStyle );
         }
 
@@ -1021,6 +1032,7 @@ sub drawAllTracks {
             my $filename = sprintf( $filenamepattern, $colorcounter );
             $image->Write($filename);
         }
+        $idx++;
     }
 
     print "\n" if ( $quiet == 0 );
