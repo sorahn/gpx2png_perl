@@ -1,0 +1,20 @@
+{
+  "name": "gpx2png_perl",
+  "version": "1.0.0",
+  "description": "gpx2png Perl",
+  "main": "index.js",
+  "scripts": {
+    "berlin": "perl gpx2png.pl -t watercolor -z 14 -c 100 -o berlin.jpg *.gpx",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sorahn/gpx2png_perl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sorahn/gpx2png_perl/issues"
+  },
+  "homepage": "https://github.com/sorahn/gpx2png_perl#readme"
+}
