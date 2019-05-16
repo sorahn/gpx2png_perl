@@ -2,19 +2,19 @@
   "name": "gpx2png_perl",
   "version": "1.0.0",
   "description": "gpx2png Perl",
+  "author": "Daryl Roberts <daryl.roberts@gmail.com>",
   "main": "index.js",
-  "scripts": {
-    "berlin": "perl gpx2png.pl -t watercolor -z 14 -c 100 -o berlin.jpg *.gpx",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "license": "ISC",
+  "homepage": "https://github.com/sorahn/gpx2png_perl#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sorahn/gpx2png_perl.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/sorahn/gpx2png_perl/issues"
   },
-  "homepage": "https://github.com/sorahn/gpx2png_perl#readme"
+  "scripts": {
+    "berlin": "perl gpx2png.pl -t watercolor -z 14 -c 100 -o berlin.jpg *.gpx",
+    "berlin-transparent": "perl gpx2png.pl -t transparent -z 14 -c 100 -o berlin-transparent.jpg *.gpx"
+  }
 }
