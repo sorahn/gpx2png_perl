@@ -15,6 +15,7 @@
   },
   "scripts": {
     "berlin": "perl gpx2png.pl -t watercolor -z 14 -c 100 -o berlin.jpg *.gpx",
-    "berlin-transparent": "perl gpx2png.pl -t transparent -z 14 -c 100 -o berlin-transparent.jpg *.gpx"
+    "berlin-large": "perl gpx2png.pl -t watercolor -z 15 -c 100 -o berlin-large.jpg *.gpx",
+    "berlin-transparent": "perl gpx2png.pl -t transparent -z 14 -c 100 -o berlin-transparent.png *.gpx"
   }
 }
